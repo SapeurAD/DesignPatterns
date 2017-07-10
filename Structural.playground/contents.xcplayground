@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<playground version='6.0' target-platform='ios' executeOnSourceChanges='false'>
+    <pages>
+        <page name='Bridge'/>
+        <page name='Decorator'/>
+        <page name='Composite'/>
+        <page name='Adapter'/>
+        <page name='Facade'/>
+    </pages>
+</playground>
