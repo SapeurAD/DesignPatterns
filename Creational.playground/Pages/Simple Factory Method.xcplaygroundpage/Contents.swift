@@ -8,11 +8,9 @@ protocol Vehicle {
 // Concrete product 1
 class ConcreteShip: Vehicle {
     let captain: String
-    let fuel: String
     
-    init(captain: String, fuel: String) {
+    init(captain: String) {
         self.captain = captain
-        self.fuel = fuel
     }
     
     func deliver() { print("Delivery cargo by sea") }
@@ -21,11 +19,9 @@ class ConcreteShip: Vehicle {
 // Concrete product 2
 class ConcreteAirplane: Vehicle {
     let pilot: String
-    let fuel: String
     
-    init(pilot: String, fuel: String) {
+    init(pilot: String) {
         self.pilot = pilot
-        self.fuel = fuel
     }
     
     func deliver() { print("Delivery cargo by air") }
@@ -42,12 +38,12 @@ class Factory {
         switch type {
             
         case .ship:
-            let ship = ConcreteShip(captain: "Jack Sparrow", fuel: "Kerosene")
+            let ship = ConcreteShip(captain: "Jack Sparrow")
             //the rest of initialisation operations here
             return ship
             
         case .airplane:
-            let airplane = ConcreteAirplane(pilot: "Zigzag", fuel: "Petrol")
+            let airplane = ConcreteAirplane(pilot: "Zigzag")
             //the rest of initialisation operations here
             return airplane
         }

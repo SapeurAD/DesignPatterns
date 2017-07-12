@@ -2,33 +2,12 @@
 
 protocol Item {
     func name() -> String
-    func packing() -> Packing
     func price() -> Float
-}
-
-protocol Packing {
-    func pack() -> String
-}
-
-class Wrapper: Packing {
-    func pack() -> String {
-        return "Wrapper"
-    }
-}
-
-class Bottle: Packing {
-    func pack() -> String {
-        return "Bottle"
-    }
 }
 
 class Burger: Item {
     func price() -> Float {
         return 0
-    }
-
-    func packing() -> Packing {
-        return Wrapper()
     }
 
     func name() -> String {
@@ -39,10 +18,6 @@ class Burger: Item {
 class ColdDrink: Item {
     func price() -> Float {
         return 0
-    }
-
-    func packing() -> Packing {
-        return Bottle()
     }
 
     func name() -> String {
@@ -110,7 +85,6 @@ class Meal {
     func showItems() {
         for item in items {
             print("Item: " + item.name())
-            print("Packing: " + item.packing().pack())
             print("Price: " + String(item.price()))
             print("\n")
         }
