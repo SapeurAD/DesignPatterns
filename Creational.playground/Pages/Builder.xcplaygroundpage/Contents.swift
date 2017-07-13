@@ -1,128 +1,166 @@
 //: [Previous](@previous)
 
-protocol Item {
-    func name() -> String
-    func price() -> Float
-}
-
-class Burger: Item {
-    func price() -> Float {
-        return 0
-    }
-
-    func name() -> String {
-        return ""
-    }
-}
-
-class ColdDrink: Item {
-    func price() -> Float {
-        return 0
-    }
-
-    func name() -> String {
-        return ""
-    }
-}
-
-class VegeterianBurger: Burger {
-    override func name() -> String {
-        return "Vegeterian Burger"
+// Product
+class Burger {
+    
+    var bread: String
+    var meat: Meat?
+    var cheese: String?
+    var vegetables: [String] = []
+    var sauceIngredients: [String] = []
+    
+    init(
+        bread: String,
+        meat: Meat?,
+        cheese: String?,
+        vegetables: [String],
+        sauceIngredients: [String]
+        )
+    {
+        self.bread = bread
+        self.meat = meat
+        self.cheese = cheese
+        self.vegetables = vegetables
+        self.sauceIngredients = sauceIngredients
     }
     
-    override func price() -> Float {
-        return 100.0
-    }
-}
-
-class ChickenBurger: Burger {
-    override func name() -> String {
-        return "Chicken Burger"
+    func price() -> String {
+        return "Price: combined price of burger components * 2"
     }
     
-    override func price() -> Float {
-        return 50.5
-    }
-}
-
-class DietCoke: ColdDrink {
-    override func name() -> String {
-        return "Diet Coke"
-    }
-    
-    override func price() -> Float {
-        return 15.5
-    }
-}
-
-class Pepsi: ColdDrink {
-    override func name() -> String {
-        return "Pepsi"
-    }
-    
-    override func price() -> Float {
-        return 10.0
-    }
-}
-
-class Meal {
-    private var items = [Item]()
-    
-    func addItem(item: Item) {
-        items.append(item)
-    }
-    
-    func getCost() -> Float {
-        var cost: Float = 0.0
+    func getListOfComponents() -> String {
+        var list = "Burger consists of: \(bread)"
         
-        for item in items {
-            cost += item.price()
+        if meat?.type.rawValue != nil {
+            list += " \((meat?.type.rawValue)!)."
         }
         
-        return cost
+        if cheese != nil {
+            list += " \(cheese!)"
+        }
+        
+        for vegetable in vegetables {
+            list += " \(vegetable)"
+        }
+        
+        for ingredient in sauceIngredients {
+            list += " \(ingredient)"
+        }
+        
+        return list
     }
     
-    func showItems() {
-        for item in items {
-            print("Item: " + item.name())
-            print("Price: " + String(item.price()))
-            print("\n")
-        }
+}
+
+class Meat {
+    
+    var type: MeatType
+    var weightInGrams: Float
+    var costPerGram: Float
+    
+    init(type: MeatType, weightInGrams: Float, costPerGram: Float) {
+        self.type = type
+        self.weightInGrams = weightInGrams
+        self.costPerGram = costPerGram
     }
+    
+    func getTotalPrice() -> Float {
+        return weightInGrams * costPerGram
+    }
+    
+}
+
+enum MeatType: String {
+    case chicken
+    case porc
+    case beef
 }
 
 // Builder
-class MealBuilder {
-    func prepareVegeterianMeal() -> Meal {
-        let meal = Meal()
-        meal.addItem(item: VegeterianBurger())
-        meal.addItem(item: DietCoke())
-        return meal
+class BurgerBuilder {
+    
+    var bread: String?
+    var meat: Meat?
+    var cheese: String?
+    
+    var vegetables: [String] = []
+    var sauceIngredients: [String] = []
+    
+    func addBread(bread: String?) {
+        self.bread = bread
     }
     
-    func prepareChickenMeal() -> Meal {
-        let meal = Meal()
-        meal.addItem(item: ChickenBurger())
-        meal.addItem(item: Pepsi())
-        return meal
+    func addMeat(meat: Meat?) {
+        self.meat = meat
+    }
+    
+    func addCheese(cheese: String?) {
+        self.cheese = cheese
+    }
+    
+    func addVegetable(vegetable: String) {
+        self.vegetables.append(vegetable)
+    }
+    
+    func addSauceIngredient(ingredient: String) {
+        self.sauceIngredients.append(ingredient)
+    }
+    
+    func build() -> Burger {
+        if bread != nil {
+            let burger = Burger(
+                bread: bread!,
+                meat: meat,
+                cheese: cheese,
+                vegetables: vegetables,
+                sauceIngredients: sauceIngredients
+            )
+            
+            return burger
+        } else {
+            fatalError("Bread never shouldn't be nil.")
+        }
+    }
+    
+}
+
+// Director
+class Vendor {
+    
+    public func prepareVeganBurger() -> Burger {
+        let burgerBuilder = BurgerBuilder()
+        
+        burgerBuilder.addBread(bread: "2 pieces of bread.")
+        burgerBuilder.addVegetable(vegetable: "Mushrooms.")
+        burgerBuilder.addVegetable(vegetable: "Nut pasta.")
+        burgerBuilder.addSauceIngredient(ingredient: "Vegan mayoneese.")
+        burgerBuilder.addSauceIngredient(ingredient: "Olive oil.")
+        
+        return burgerBuilder.build()
+    }
+    
+    public func prepareChickenBurger() -> Burger {
+        let burgerBuilder = BurgerBuilder()
+        
+        burgerBuilder.addBread(bread: "3 pieces of bread.")
+        burgerBuilder.addMeat(meat: Meat(type: .chicken, weightInGrams: 100, costPerGram: 10))
+        burgerBuilder.addCheese(cheese: "Cheese gauda.")
+        burgerBuilder.addSauceIngredient(ingredient: "Ketchup.")
+        burgerBuilder.addSauceIngredient(ingredient: "Mayoneese.")
+        
+        return burgerBuilder.build()
     }
 }
 
 // Demo
-let mealBuilder = MealBuilder()
+let emma = Vendor()
 
-let veganMeal = mealBuilder.prepareVegeterianMeal()
-print("Vegeterian Meal")
-print("\n")
-veganMeal.showItems()
-print("Total cost: " + String(veganMeal.getCost()))
+let burger1 = emma.prepareVeganBurger()
+let burger2 = emma.prepareChickenBurger()
+let burger3 = emma.prepareVeganBurger()
 
-print("\n--------------------------------------\n")
-
-let chickenMeal = mealBuilder.prepareChickenMeal()
-print("Chicken Meal")
-print("\n")
-chickenMeal.showItems()
-print("Total cost: " + String(chickenMeal.getCost()))
+print(burger1.getListOfComponents())
+print(burger2.getListOfComponents())
+print(burger3.getListOfComponents())
 
 //: [Next](@next)

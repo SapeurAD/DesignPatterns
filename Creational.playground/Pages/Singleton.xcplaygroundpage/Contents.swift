@@ -18,6 +18,9 @@ class Singleton {
 
 // Demo
 let object = Singleton.shared
-print(object.data)
+
+if let data = object.data {
+    print(data)
+}
 
 //: [Next](@next)

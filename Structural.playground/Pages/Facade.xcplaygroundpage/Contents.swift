@@ -9,6 +9,7 @@ class DateHelper {
     }
 }
 
+
 class Appartment {
     var costPerDay: Float
     var startDate: Date
@@ -55,14 +56,12 @@ class HotelBooker {
                 theCheapestAppartment = appartment
             }
         }
-        
-        print("We have found the cheapest appartment with the cost per day: \(theCheapestAppartment.costPerDay) $")
-        
         return theCheapestAppartment
     }
     
-    func bookCheapestAppartment(appartment: Appartment) {
+    func bookAppartment(appartment: Appartment) {
         //use any 3rd party appartment booking system(s) with best offer to book apparment
+        
         enum BookingService: Float {
             case bestDiscountMultiplier = 0.75
             case worstDiscountMultiplier = 0.99
@@ -70,19 +69,19 @@ class HotelBooker {
         
         appartment.discountMultiplier = BookingService.bestDiscountMultiplier.rawValue
         
-        print("We have booked an appartment from date \(appartment.startDate) to date \(appartment.endDate). Total cost: \(appartment.getTotalCost()) $)")
+        print("We have booked an appartment from date \(appartment.startDate) to date \(appartment.endDate). Cost per day: \(appartment.costPerDay)$. Total cost with discount: \(appartment.getTotalCost())$")
     }
 }
 
 class FlightBooker {
-    func searchForFlight(startDate: Date, endDate: Date) {
+    func searchForCheapestTicket(date: Date) -> Ticket{
         //use any 3rd party flight searching system(s)
-        print("We have found a flight")
+        return Ticket(cost: 100, date: date)
     }
     
-    func bookTicket() {
+    func bookTicket(ticket: Ticket) {
         //use any 3rd party ticket booking system(s)
-        print("We have booked a ticket")
+        print("We have booked a ticket with cost: \(ticket.cost) for date \(ticket.date)")
     }
 }
 
@@ -91,16 +90,21 @@ class TravelFacade {
     private var flightBooker = FlightBooker()
     
     func bookFlightAndHotel(startDate: Date, endDate: Date) {
+        
         let appartment = hotelBooker.searchForCheapestAppartment(
             startDate: startDate,
             endDate: endDate
         )
         
-        hotelBooker.bookCheapestAppartment(appartment: appartment)
+        hotelBooker.bookAppartment(appartment: appartment)
         
-        flightBooker.searchForFlight(startDate: startDate, endDate: endDate)
+        let firstTicket = flightBooker.searchForCheapestTicket(date: startDate)
         
-        flightBooker.bookTicket()
+        flightBooker.bookTicket(ticket: firstTicket)
+        
+        let secondTicket = flightBooker.searchForCheapestTicket(date: endDate)
+        
+        flightBooker.bookTicket(ticket: secondTicket)
     }
 }
 
