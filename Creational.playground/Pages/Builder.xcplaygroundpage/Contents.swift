@@ -5,21 +5,18 @@ class Burger {
     
     var bread: String
     var meat: Meat?
-    var cheese: String?
     var vegetables: [String] = []
     var sauceIngredients: [String] = []
     
     init(
         bread: String,
         meat: Meat?,
-        cheese: String?,
         vegetables: [String],
         sauceIngredients: [String]
         )
     {
         self.bread = bread
         self.meat = meat
-        self.cheese = cheese
         self.vegetables = vegetables
         self.sauceIngredients = sauceIngredients
     }
@@ -33,10 +30,6 @@ class Burger {
         
         if meat?.type.rawValue != nil {
             list += " \((meat?.type.rawValue)!)."
-        }
-        
-        if cheese != nil {
-            list += " \(cheese!)"
         }
         
         for vegetable in vegetables {
@@ -81,10 +74,10 @@ class BurgerBuilder {
     
     var bread: String?
     var meat: Meat?
-    var cheese: String?
     
     var vegetables: [String] = []
     var sauceIngredients: [String] = []
+    
     
     func addBread(bread: String?) {
         self.bread = bread
@@ -92,10 +85,6 @@ class BurgerBuilder {
     
     func addMeat(meat: Meat?) {
         self.meat = meat
-    }
-    
-    func addCheese(cheese: String?) {
-        self.cheese = cheese
     }
     
     func addVegetable(vegetable: String) {
@@ -106,12 +95,12 @@ class BurgerBuilder {
         self.sauceIngredients.append(ingredient)
     }
     
+    
     func build() -> Burger {
         if bread != nil {
             let burger = Burger(
                 bread: bread!,
                 meat: meat,
-                cheese: cheese,
                 vegetables: vegetables,
                 sauceIngredients: sauceIngredients
             )
@@ -144,7 +133,6 @@ class Vendor {
         
         burgerBuilder.addBread(bread: "3 pieces of bread.")
         burgerBuilder.addMeat(meat: Meat(type: .chicken, weightInGrams: 100, costPerGram: 10))
-        burgerBuilder.addCheese(cheese: "Cheese gauda.")
         burgerBuilder.addSauceIngredient(ingredient: "Ketchup.")
         burgerBuilder.addSauceIngredient(ingredient: "Mayoneese.")
         

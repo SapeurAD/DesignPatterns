@@ -1,41 +1,41 @@
 //: [Previous](@previous)
 
 // Existing Interface
-protocol OldMediaPlayerInterface {
-    func insertCD(title: String)
+protocol OldInterface {
+    func insertGramophoneRecord(title: String)
     func play()
 }
 
 // Existing realisation
-class OldMediaPlayer: OldMediaPlayerInterface {
-    func insertCD(title: String) {
-        print("Inserting \(title) CD")
+class OldMediaPlayer: OldInterface {
+    func insertGramophoneRecord(title: String) {
+        print("Inserting \(title) Gramophone Record")
     }
     
     func play() {
-        print("Playing track from CD")
+        print("Playing song from Gramophone Record")
     }
 }
 
 // New interface
-protocol NewMediaPlayerInterface {
-    func getMedia(title: String)
-    func playMedia()
+protocol NewInterface {
+    func insertCD(title: String)
+    func playCD()
 }
 
 // New realisation
-class NewMediaPlayer: NewMediaPlayerInterface {
-    func getMedia(title: String) {
-        print("Downloading \(title) from the cloud")
+class NewMediaPlayer: NewInterface {
+    func insertCD(title: String) {
+        print("Inserting \(title) CD")
     }
     
-    func playMedia() {
-        print("Playing track from the cloud")
+    func playCD() {
+        print("Playing track from CD")
     }
 }
 
 // Adapter
-class MediaPlayerAdapter: OldMediaPlayerInterface {
+class OldMediaPlayerAdapter: OldInterface {
     
     private let mediaPlayer: NewMediaPlayer
     
@@ -43,18 +43,19 @@ class MediaPlayerAdapter: OldMediaPlayerInterface {
         self.mediaPlayer = mediaPlayer
     }
     
-    func insertCD(title: String) {
-        mediaPlayer.getMedia(title: title)
+    func insertGramophoneRecord(title: String) {
+        mediaPlayer.insertCD(title: title)
     }
     
     func play() {
-        mediaPlayer.playMedia()
+        mediaPlayer.playCD()
     }
 }
 
 // Demo
-let mediaPlayerAdapter = MediaPlayerAdapter(mediaPlayer: NewMediaPlayer())
-mediaPlayerAdapter.insertCD(title: "Skrillex")
-mediaPlayerAdapter.play()
+let newMediaPlayer = OldMediaPlayerAdapter(mediaPlayer: NewMediaPlayer())
+
+newMediaPlayer.insertGramophoneRecord(title: "[Eminem - Stan]")
+newMediaPlayer.play()
 
 //: [Next](@next)

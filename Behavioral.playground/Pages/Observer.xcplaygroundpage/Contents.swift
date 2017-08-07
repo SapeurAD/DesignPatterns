@@ -19,6 +19,8 @@ class Gates: AlarmListener {
     }
 }
 
+
+
 // Observable
 class SensorSystem {
     //we can't use a set of observers in the example, so we use an array of observers

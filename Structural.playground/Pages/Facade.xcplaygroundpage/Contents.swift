@@ -42,6 +42,7 @@ class Ticket {
 }
 
 class HotelBooker {
+    
     func searchForCheapestAppartment(startDate: Date, endDate: Date) -> Appartment {
         //use any 3rd party hotel searching system(s) to find the cheapest appartment
         let appartment1 = Appartment(costPerDay: 100.1, startDate: startDate, endDate: endDate)
@@ -71,9 +72,11 @@ class HotelBooker {
         
         print("We have booked an appartment from date \(appartment.startDate) to date \(appartment.endDate). Cost per day: \(appartment.costPerDay)$. Total cost with discount: \(appartment.getTotalCost())$")
     }
+    
 }
 
 class FlightBooker {
+    
     func searchForCheapestTicket(date: Date) -> Ticket{
         //use any 3rd party flight searching system(s)
         return Ticket(cost: 100, date: date)
@@ -83,9 +86,11 @@ class FlightBooker {
         //use any 3rd party ticket booking system(s)
         print("We have booked a ticket with cost: \(ticket.cost) for date \(ticket.date)")
     }
+    
 }
 
 class TravelFacade {
+    
     private var hotelBooker = HotelBooker()
     private var flightBooker = FlightBooker()
     
@@ -106,6 +111,7 @@ class TravelFacade {
         
         flightBooker.bookTicket(ticket: secondTicket)
     }
+    
 }
 
 
