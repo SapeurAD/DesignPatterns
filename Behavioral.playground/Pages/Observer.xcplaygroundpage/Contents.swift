@@ -1,6 +1,5 @@
-//: [Previous](@previous)
 
-// Interface
+// Observer Interface
 protocol AlarmListener {
     func alarm()
 }
@@ -20,9 +19,15 @@ class Gates: AlarmListener {
 }
 
 
+// Observable Interface
+protocol AlarmGenerator {
+    func register(listener: AlarmListener)
+    func unregister(listener: AlarmListener)
+    func raiseAlarm()
+}
 
 // Observable
-class SensorSystem {
+class SensorSystem: AlarmGenerator {
     //we can't use a set of observers in the example, so we use an array of observers
     private var alarmListeners = [AlarmListener]()
     
@@ -34,13 +39,14 @@ class SensorSystem {
         alarmListeners.removeLast()
     }
     
-    func soundTheAlarm() {
+    func raiseAlarm() {
         for listener in alarmListeners {
             listener.alarm()
         }
     }
     
 }
+
 
 // Demo
 let sensorSystem = SensorSystem()
@@ -50,10 +56,8 @@ let gates = Gates()
 
 sensorSystem.register(listener: lighting)
 sensorSystem.register(listener: gates)
-sensorSystem.soundTheAlarm()
+sensorSystem.raiseAlarm()
 
-print("\n")
+print("Reset sensor system")
 sensorSystem.unregister(listener: gates)
-sensorSystem.soundTheAlarm()
-
-//: [Next](@next)
+sensorSystem.raiseAlarm()

@@ -1,53 +1,91 @@
-//: [Previous](@previous)
 
-//Interface
-protocol ResponderInterface {
-    func speak(input: String) -> String
+// Interface
+protocol PaymentStrategy {
+    func pay(amount: Int)
+}
+
+// Strategy 1
+class CreditCardStrategy: PaymentStrategy {
+    private var name: String
+    private var cardNumber: String
+    private var cvv: String
+    private var dateOfExpiration: String
+    
+    init(name: String, cardNumber: String, cvv: String, dateOfExpiration: String) {
+        self.name = name
+        self.cardNumber = cardNumber
+        self.cvv = cvv
+        self.dateOfExpiration = dateOfExpiration
+    }
+    
+    func pay(amount: Int) {
+        print(String(amount) + " paid with credit card")
+    }
+}
+
+// Strategy 2
+class PaypalStrategy: PaymentStrategy {
+    private var email: String
+    private var password: String
+    
+    init(email: String, password: String) {
+        self.email = email
+        self.password = password
+    }
+    
+    func pay(amount: Int) {
+        print(String(amount) + " paid using Paypal")
+    }
 }
 
 
-class Chatbot {
-    private var responder: ResponderInterface?
+// Cart
+class Item {
+    private var upcCode: Int
+    private var price: Int
     
-    public func setResponder(responder: ResponderInterface) {
-        self.responder = responder
+    init(upcCode: Int, price: Int) {
+        self.upcCode = upcCode
+        self.price = price
     }
     
-    public func respond(inputString: String) -> String {
-        if let responder = self.responder {
-            return responder.speak(input: inputString)
-        } else {
-            return "Choose responder first"
+    func getPrice() -> Int {
+        return self.price
+    }
+}
+
+class ShopingCart {
+    var items: [Item] = []
+    
+    func addItem(item: Item) {
+        items.append(item)
+    }
+    
+    func calculateTotalPrice() -> Int {
+        var sum = 0
+        for item in items {
+            sum += item.getPrice()
         }
+        return sum
     }
-}
-
-
-public class EnglishSpeaker: ResponderInterface {
-    func speak(input: String) -> String {
-        return "You said: " + input
-    }
-}
-
-
-public class RussianSpeaker: ResponderInterface {
-    func speak(input: String) -> String {
-        return "Вы сказали: " + input
+    
+    func pay(paymentMethod: PaymentStrategy) {
+        let amount = calculateTotalPrice()
+        paymentMethod.pay(amount: amount)
     }
 }
 
 
 // Demo
-let russianResponder = RussianSpeaker()
-let englishResponder = EnglishSpeaker()
+let item1 = Item(upcCode: 1111, price: 10)
+let item2 = Item(upcCode: 2222, price: 20)
 
-var mainBot = Chatbot()
-print(mainBot.respond(inputString: "I haven's set responder yet"))
+let cart = ShopingCart()
+cart.addItem(item: item1)
+cart.addItem(item: item2)
 
-mainBot.setResponder(responder: russianResponder)
-print(mainBot.respond(inputString: "Hello Bot"))
+cart.pay(paymentMethod: CreditCardStrategy(name: "A", cardNumber: "1111", cvv: "212", dateOfExpiration: "02/2018"))
 
-mainBot.setResponder(responder: englishResponder)
-print(mainBot.respond(inputString: "Hello Bot"))
+cart.pay(paymentMethod: PaypalStrategy(email: "test@test.com", password: "1111"))
 
-//: [Next](@next)
+// параметр tax discount etc. //setStrategy, applyStrategy

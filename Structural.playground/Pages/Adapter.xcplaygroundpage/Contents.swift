@@ -1,13 +1,16 @@
-//: [Previous](@previous)
 
 // Existing Interface
-protocol OldInterface {
+protocol OldMediaPlayer {
     func insertGramophoneRecord(title: String)
     func play()
 }
 
+enum RecordType {
+    case gram, cd
+}
+
 // Existing realisation
-class OldMediaPlayer: OldInterface {
+class Gramophone: OldMediaPlayer {
     func insertGramophoneRecord(title: String) {
         print("Inserting \(title) Gramophone Record")
     }
@@ -17,14 +20,15 @@ class OldMediaPlayer: OldInterface {
     }
 }
 
+
 // New interface
-protocol NewInterface {
+protocol NewMediaPlayer {
     func insertCD(title: String)
     func playCD()
 }
 
 // New realisation
-class NewMediaPlayer: NewInterface {
+class CDPlayer: NewMediaPlayer {
     func insertCD(title: String) {
         print("Inserting \(title) CD")
     }
@@ -34,12 +38,13 @@ class NewMediaPlayer: NewInterface {
     }
 }
 
+
 // Adapter
-class OldMediaPlayerAdapter: OldInterface {
+class MediaAdapter: OldMediaPlayer {
     
-    private let mediaPlayer: NewMediaPlayer
+    private let mediaPlayer: CDPlayer
     
-    init(mediaPlayer: NewMediaPlayer) {
+    init(mediaPlayer: CDPlayer) {
         self.mediaPlayer = mediaPlayer
     }
     
@@ -52,10 +57,13 @@ class OldMediaPlayerAdapter: OldInterface {
     }
 }
 
+
 // Demo
-let newMediaPlayer = OldMediaPlayerAdapter(mediaPlayer: NewMediaPlayer())
+let adaptedMediaPlayer = MediaAdapter(mediaPlayer: CDPlayer())
 
-newMediaPlayer.insertGramophoneRecord(title: "[Eminem - Stan]")
-newMediaPlayer.play()
+adaptedMediaPlayer.insertGramophoneRecord(title: "[Sia - Elastic Heart]")
 
-//: [Next](@next)
+adaptedMediaPlayer.play()
+
+
+// переделать адаптер - генерик на вход + проверка

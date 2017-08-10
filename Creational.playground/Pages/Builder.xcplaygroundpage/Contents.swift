@@ -1,4 +1,3 @@
-//: [Previous](@previous)
 
 // Product
 class Burger {
@@ -20,31 +19,10 @@ class Burger {
         self.vegetables = vegetables
         self.sauceIngredients = sauceIngredients
     }
-    
-    func price() -> String {
-        return "Price: combined price of burger components * 2"
-    }
-    
-    func getListOfComponents() -> String {
-        var list = "Burger consists of: \(bread)"
-        
-        if meat?.type.rawValue != nil {
-            list += " \((meat?.type.rawValue)!)."
-        }
-        
-        for vegetable in vegetables {
-            list += " \(vegetable)"
-        }
-        
-        for ingredient in sauceIngredients {
-            list += " \(ingredient)"
-        }
-        
-        return list
-    }
-    
+
 }
 
+// Ingredient
 class Meat {
     
     var type: MeatType
@@ -63,22 +41,23 @@ class Meat {
     
 }
 
+// Enumeration to generalize and simplify undestanding of meat type
 enum MeatType: String {
     case chicken
     case porc
     case beef
 }
 
+
 // Builder
 class BurgerBuilder {
     
     var bread: String?
     var meat: Meat?
-    
     var vegetables: [String] = []
     var sauceIngredients: [String] = []
     
-    
+    // Constructing methods
     func addBread(bread: String?) {
         self.bread = bread
     }
@@ -94,7 +73,6 @@ class BurgerBuilder {
     func addSauceIngredient(ingredient: String) {
         self.sauceIngredients.append(ingredient)
     }
-    
     
     func build() -> Burger {
         if bread != nil {
@@ -112,6 +90,7 @@ class BurgerBuilder {
     }
     
 }
+
 
 // Director
 class Vendor {
@@ -131,7 +110,7 @@ class Vendor {
     public func prepareChickenBurger() -> Burger {
         let burgerBuilder = BurgerBuilder()
         
-        burgerBuilder.addBread(bread: "3 pieces of bread.")
+        burgerBuilder.addBread(bread: "2 pieces of bread.")
         burgerBuilder.addMeat(meat: Meat(type: .chicken, weightInGrams: 100, costPerGram: 10))
         burgerBuilder.addSauceIngredient(ingredient: "Ketchup.")
         burgerBuilder.addSauceIngredient(ingredient: "Mayoneese.")
@@ -140,15 +119,57 @@ class Vendor {
     }
 }
 
-// Demo
-let emma = Vendor()
 
-let burger1 = emma.prepareVeganBurger()
-let burger2 = emma.prepareChickenBurger()
-let burger3 = emma.prepareVeganBurger()
+// Demo
+let vendor = Vendor()
+
+let burger1 = vendor.prepareVeganBurger()
+let burger2 = vendor.prepareChickenBurger()
+let burger3 = vendor.prepareVeganBurger()
 
 print(burger1.getListOfComponents())
 print(burger2.getListOfComponents())
 print(burger3.getListOfComponents())
 
-//: [Next](@next)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+extension Burger {
+    func price() -> String {
+        return "Price: combined price of burger components * 2"
+    }
+    
+    func getListOfComponents() -> String {
+        var list = "Burger consists of: \(bread)"
+        
+        if meat?.type.rawValue != nil {
+            list += " \((meat?.type.rawValue.uppercased())!)."
+        }
+        
+        for vegetable in vegetables {
+            list += " \(vegetable)"
+        }
+        
+        for ingredient in sauceIngredients {
+            list += " \(ingredient)"
+        }
+        
+        return list
+    }
+}

@@ -1,4 +1,3 @@
-//: [Previous](@previous)
 
 // Interface
 protocol Vehicle {
@@ -7,7 +6,7 @@ protocol Vehicle {
 
 // Concrete product 1
 class ConcreteShip: Vehicle {
-    let captain: String
+    private var captain: String
     
     init(captain: String) {
         self.captain = captain
@@ -18,7 +17,7 @@ class ConcreteShip: Vehicle {
 
 // Concrete product 2
 class ConcreteAirplane: Vehicle {
-    let pilot: String
+    private var pilot: String
     
     init(pilot: String) {
         self.pilot = pilot
@@ -32,8 +31,9 @@ enum ProductType {
     case airplane
 }
 
+
 // Single factory produces many products
-class Factory {
+class VehicleFactory {
     static func createProduct(type: ProductType) -> Vehicle {
         switch type {
             
@@ -50,16 +50,18 @@ class Factory {
     }
 }
 
+
 // Demo
-let concreteShip = Factory.createProduct(type: .ship)
-let concreteAirplane = Factory.createProduct(type: .airplane)
+let concreteShip = VehicleFactory.createProduct(type: .ship)
+
+let concreteAirplane = VehicleFactory.createProduct(type: .airplane)
+
 
 var products: [Vehicle] = []
 products.append(concreteShip)
 products.append(concreteAirplane)
 
+
 for item in products {
     item.deliver()
 }
-
-//: [Next](@next)

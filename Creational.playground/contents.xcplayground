@@ -2,7 +2,7 @@
 <playground version='6.0' target-platform='ios' executeOnSourceChanges='false'>
     <pages>
         <page name='Factory Method'/>
-        <page name='Simple Factory Method'/>
+        <page name='Simple Factory'/>
         <page name='AbstractFactory'/>
         <page name='Builder'/>
         <page name='Prototype'/>

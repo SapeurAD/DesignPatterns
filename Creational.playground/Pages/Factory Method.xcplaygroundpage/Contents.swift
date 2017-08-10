@@ -1,4 +1,3 @@
-//: [Previous](@previous)
 
 // Product interface
 protocol Vehicle {
@@ -27,6 +26,7 @@ class ConcreteAirplane: Vehicle {
     func deliver() { print("Delivery cargo by air") }
 }
 
+
 // Creator interface
 protocol CreatorInterface {
     static func createVehicle() -> Vehicle
@@ -50,6 +50,7 @@ class AirplaneCreator: CreatorInterface {
     }
 }
 
+
 // Demo
 let concreteShip = ShipCreator.createVehicle()
 let concreteAirplane = AirplaneCreator.createVehicle()
@@ -61,5 +62,3 @@ products.append(concreteAirplane)
 for item in products {
     item.deliver()
 }
-
-//: [Next](@next)
