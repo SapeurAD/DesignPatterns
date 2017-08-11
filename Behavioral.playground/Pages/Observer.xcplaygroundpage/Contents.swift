@@ -26,10 +26,13 @@ protocol AlarmGenerator {
     func raiseAlarm()
 }
 
-// Observable
-class SensorSystem: AlarmGenerator {
-    //we can't use a set of observers in the example, so we use an array of observers
-    private var alarmListeners = [AlarmListener]()
+// Observable + Observer in the same time
+class CentralConsole: AlarmGenerator, AlarmListener {
+    func alarm() {
+        raiseAlarm()
+    }
+
+    private var alarmListeners: [AlarmListener] = []
     
     func register(listener: AlarmListener) {
         alarmListeners.append(listener)
@@ -44,20 +47,35 @@ class SensorSystem: AlarmGenerator {
             listener.alarm()
         }
     }
+}
+
+class Sensor: AlarmGenerator {
+    private var alarmListener: AlarmListener!
     
+    func register(listener: AlarmListener) {
+        alarmListener = listener
+    }
+    
+    func unregister(listener: AlarmListener) {
+        alarmListener = listener
+    }
+    
+    func raiseAlarm() {
+        alarmListener.alarm()
+    }
 }
 
 
 // Demo
-let sensorSystem = SensorSystem()
+let sensor = Sensor()
+let centralConsole = CentralConsole()
 
 let lighting = Lighting()
 let gates = Gates()
 
-sensorSystem.register(listener: lighting)
-sensorSystem.register(listener: gates)
-sensorSystem.raiseAlarm()
+sensor.register(listener: centralConsole)
+centralConsole.register(listener: lighting)
+centralConsole.register(listener: gates)
 
-print("Reset sensor system")
-sensorSystem.unregister(listener: gates)
-sensorSystem.raiseAlarm()
+print("Alarm!")
+sensor.raiseAlarm()

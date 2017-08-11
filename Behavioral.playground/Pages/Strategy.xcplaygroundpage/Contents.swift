@@ -1,7 +1,7 @@
 
 // Interface
 protocol PaymentStrategy {
-    func pay(amount: Int)
+    func pay(amount: Double)
 }
 
 // Strategy 1
@@ -18,8 +18,8 @@ class CreditCardStrategy: PaymentStrategy {
         self.dateOfExpiration = dateOfExpiration
     }
     
-    func pay(amount: Int) {
-        print(String(amount) + " paid with credit card")
+    func pay(amount: Double) {
+        print(String(amount * 0.95) + " paid with credit card")
     }
 }
 
@@ -33,8 +33,8 @@ class PaypalStrategy: PaymentStrategy {
         self.password = password
     }
     
-    func pay(amount: Int) {
-        print(String(amount) + " paid using Paypal")
+    func pay(amount: Double) {
+        print(String(amount * 0.99) + " paid using Paypal")
     }
 }
 
@@ -42,36 +42,42 @@ class PaypalStrategy: PaymentStrategy {
 // Cart
 class Item {
     private var upcCode: Int
-    private var price: Int
+    private var price: Double
     
-    init(upcCode: Int, price: Int) {
+    init(upcCode: Int, price: Double) {
         self.upcCode = upcCode
         self.price = price
     }
     
-    func getPrice() -> Int {
+    func getPrice() -> Double {
         return self.price
     }
 }
 
 class ShopingCart {
+    private var strategy: PaymentStrategy!
+    
     var items: [Item] = []
+
+    func setStrategy(strategy: PaymentStrategy) {
+        self.strategy = strategy
+    }
     
     func addItem(item: Item) {
         items.append(item)
     }
     
-    func calculateTotalPrice() -> Int {
-        var sum = 0
+    func calculateTotalPrice() -> Double {
+        var sum: Double = 0
         for item in items {
             sum += item.getPrice()
         }
         return sum
     }
     
-    func pay(paymentMethod: PaymentStrategy) {
+    func pay() {
         let amount = calculateTotalPrice()
-        paymentMethod.pay(amount: amount)
+        strategy.pay(amount: amount)
     }
 }
 
@@ -84,8 +90,12 @@ let cart = ShopingCart()
 cart.addItem(item: item1)
 cart.addItem(item: item2)
 
-cart.pay(paymentMethod: CreditCardStrategy(name: "A", cardNumber: "1111", cvv: "212", dateOfExpiration: "02/2018"))
+let paypalStrategy = CreditCardStrategy(name: "A", cardNumber: "1111", cvv: "212", dateOfExpiration: "02/2018")
 
-cart.pay(paymentMethod: PaypalStrategy(email: "test@test.com", password: "1111"))
+let creditCardStrategy = PaypalStrategy(email: "test@test.com", password: "1111")
 
-// параметр tax discount etc. //setStrategy, applyStrategy
+cart.setStrategy(strategy: paypalStrategy)
+cart.pay()
+
+cart.setStrategy(strategy: creditCardStrategy)
+cart.pay()

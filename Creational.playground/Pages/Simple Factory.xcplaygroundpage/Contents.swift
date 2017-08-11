@@ -1,11 +1,11 @@
 
 // Interface
-protocol Vehicle {
+protocol Transport {
     func deliver()
 }
 
-// Concrete product 1
-class ConcreteShip: Vehicle {
+
+class OurShip: Transport {
     private var captain: String
     
     init(captain: String) {
@@ -15,35 +15,34 @@ class ConcreteShip: Vehicle {
     func deliver() { print("Delivery cargo by sea") }
 }
 
-// Concrete product 2
-class ConcreteAirplane: Vehicle {
-    private var pilot: String
+
+class LeasedPlane: Transport {
+    private var contract: String
     
-    init(pilot: String) {
-        self.pilot = pilot
+    init(contract: String) {
+        self.contract = contract
     }
     
     func deliver() { print("Delivery cargo by air") }
 }
 
-enum ProductType {
+enum TransportType {
     case ship
     case airplane
 }
 
-
 // Single factory produces many products
-class VehicleFactory {
-    static func createProduct(type: ProductType) -> Vehicle {
+class TransportFactory {
+    static func createTransport(type: TransportType) -> Transport {
         switch type {
             
         case .ship:
-            let ship = ConcreteShip(captain: "Jack Sparrow")
+            let ship = OurShip(captain: "Jack Sparrow")
             //the rest of initialisation operations here
             return ship
             
         case .airplane:
-            let airplane = ConcreteAirplane(pilot: "Zigzag")
+            let airplane = LeasedPlane(contract: "A903539489284")
             //the rest of initialisation operations here
             return airplane
         }
@@ -52,16 +51,16 @@ class VehicleFactory {
 
 
 // Demo
-let concreteShip = VehicleFactory.createProduct(type: .ship)
+let ourShip = TransportFactory.createTransport(type: .ship)
 
-let concreteAirplane = VehicleFactory.createProduct(type: .airplane)
-
-
-var products: [Vehicle] = []
-products.append(concreteShip)
-products.append(concreteAirplane)
+let leasedPlane = TransportFactory.createTransport(type: .airplane)
 
 
-for item in products {
-    item.deliver()
+var transportList: [Transport] = []
+transportList.append(ourShip)
+transportList.append(leasedPlane)
+
+
+for transport in transportList {
+    transport.deliver()
 }
