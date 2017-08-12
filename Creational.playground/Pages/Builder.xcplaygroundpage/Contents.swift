@@ -1,3 +1,5 @@
+
+// Builder
 class BurgerBuilder {
     private let components = BurgerComponents()
     

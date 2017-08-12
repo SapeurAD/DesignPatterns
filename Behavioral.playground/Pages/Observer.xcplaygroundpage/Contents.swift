@@ -1,20 +1,30 @@
 
 // Observer Interface
 protocol AlarmListener {
-    func alarm()
+    func updateAlarmState(state: Bool)
 }
 
 // Observer 1
 class Lighting: AlarmListener {
-    func alarm() {
-        print("Lights up!")
+    func updateAlarmState(state: Bool) {
+        if state == true {
+            print("Lights up!")
+        } else {
+            print("Lights off.")
+        }
+        
     }
 }
 
 // Observer 2
 class Gates: AlarmListener {
-    func alarm() {
-        print("Close the gates!")
+    func updateAlarmState(state: Bool) {
+        if state == true {
+            print("Block the gates!")
+        } else {
+            print("Unblock the gates.")
+        }
+        
     }
 }
 
@@ -23,13 +33,15 @@ class Gates: AlarmListener {
 protocol AlarmGenerator {
     func register(listener: AlarmListener)
     func unregister(listener: AlarmListener)
-    func raiseAlarm()
+    func notifyAlarmListeners()
 }
 
 // Observable + Observer in the same time
 class CentralConsole: AlarmGenerator, AlarmListener {
-    func alarm() {
-        raiseAlarm()
+    var alarmState: Bool = false {
+        didSet {
+            notifyAlarmListeners()
+        }
     }
 
     private var alarmListeners: [AlarmListener] = []
@@ -42,26 +54,36 @@ class CentralConsole: AlarmGenerator, AlarmListener {
         alarmListeners.removeLast()
     }
     
-    func raiseAlarm() {
+    func notifyAlarmListeners() {
         for listener in alarmListeners {
-            listener.alarm()
+            listener.updateAlarmState(state: alarmState)
         }
+    }
+    
+    func updateAlarmState(state: Bool) {
+        alarmState = state
     }
 }
 
 class Sensor: AlarmGenerator {
-    private var alarmListener: AlarmListener!
+    var alarmState = false {
+        didSet {
+            notifyAlarmListeners()
+        }
+    }
+    
+    private var alarmListener: AlarmListener?
     
     func register(listener: AlarmListener) {
         alarmListener = listener
     }
     
     func unregister(listener: AlarmListener) {
-        alarmListener = listener
+        alarmListener = nil
     }
     
-    func raiseAlarm() {
-        alarmListener.alarm()
+    func notifyAlarmListeners() {
+        alarmListener?.updateAlarmState(state: alarmState)
     }
 }
 
@@ -77,5 +99,10 @@ sensor.register(listener: centralConsole)
 centralConsole.register(listener: lighting)
 centralConsole.register(listener: gates)
 
-print("Alarm!")
-sensor.raiseAlarm()
+print("Alarm on!")
+sensor.alarmState = true
+
+print("\n -=Change of the state=- \n")
+
+print("Alarm off.")
+sensor.alarmState = false

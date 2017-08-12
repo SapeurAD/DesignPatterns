@@ -1,4 +1,5 @@
 
+// Interfaces
 protocol MediaPlayer {
     func play(audioType: String, filename: String)
 }
@@ -7,6 +8,7 @@ protocol AdvancedMediaPlayer {
     func play(filename: String)
 }
 
+// New classes
 class Mp4Player: AdvancedMediaPlayer {
     func play(filename: String) {
         print("Playing mp4 file: " + filename)
@@ -19,6 +21,7 @@ class VlcPlayer: AdvancedMediaPlayer {
     }
 }
 
+// Adapter
 class MediaAdapter: MediaPlayer {
     private var advancedMediaPlayer: AdvancedMediaPlayer!
     
@@ -36,6 +39,7 @@ class MediaAdapter: MediaPlayer {
     }
 }
 
+// Old class
 class AudioPlayer: MediaPlayer {
     private var mediaAdapter: MediaAdapter!
     
@@ -59,93 +63,3 @@ audioPlayer.play(audioType: "mp4", filename: "Metallica - Unforgiven.mp4")
 audioPlayer.play(audioType: "vlc", filename: "Vivaldi - Summer.vlc")
 audioPlayer.play(audioType: "avi", filename: "Star Wars.avi")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-// Existing Interface
-protocol OldMediaPlayer {
-    func insertGramophoneRecord(title: String)
-    func play()
-}
-
-// Existing realisation
-class Gramophone: OldMediaPlayer {
-    func insertGramophoneRecord(title: String) {
-        print("Inserting \(title) Gramophone Record")
-    }
-    
-    func play() {
-        print("Playing song from Gramophone Record")
-    }
-}
-
-
-// New interface
-protocol NewMediaPlayer {
-    func insertCD(title: String)
-    func playCD()
-}
-
-// New realisation
-class CDPlayer: NewMediaPlayer {
-    func insertCD(title: String) {
-        print("Inserting \(title) CD")
-    }
-    
-    func playCD() {
-        print("Playing track from CD")
-    }
-}
-
-
-// Adapter
-class MediaAdapter: NewMediaPlayer {
-    
-    private let mediaPlayer: Gramophone
-    
-    init(mediaPlayer: Gramophone) {
-        self.mediaPlayer = mediaPlayer
-    }
-    
-    func insertCD(title: String) {
-        mediaPlayer.insertGramophoneRecord(title: title)
-    }
-    
-    func playCD() {
-        mediaPlayer.play()
-    }
-}
-
-
-// Demo
-let adaptedMediaPlayer = MediaAdapter(mediaPlayer: Gramophone())
-adaptedMediaPlayer.insertCD(title: "[Sia - Elastic Heart]")
-adaptedMediaPlayer.playCD()
-*/

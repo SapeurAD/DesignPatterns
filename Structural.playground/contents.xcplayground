@@ -2,9 +2,9 @@
 <playground version='6.0' target-platform='ios' executeOnSourceChanges='false'>
     <pages>
         <page name='Bridge'/>
-        <page name='Decorator'/>
-        <page name='Composite'/>
-        <page name='Adapter'/>
+        <page name='Adapter1'/>
+        <page name='Adapter2'/>
+        <page name='Adapter3'/>
         <page name='Facade'/>
     </pages>
 </playground>
